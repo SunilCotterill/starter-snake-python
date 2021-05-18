@@ -3,20 +3,12 @@ import random
 
 import cherrypy
 
-"""
-This is a simple Battlesnake server written in Python.
-For instructions see https://github.com/BattlesnakeOfficial/starter-snake-python/README.md
-"""
-
 
 class Battlesnake(object):
     next_next_move = ""
     @cherrypy.expose
     @cherrypy.tools.json_out()
-    def index(self):
-        # This function is called when you register your Battlesnake on play.battlesnake.com
-        # It controls your Battlesnake appearance and author permissions.
-        # TIP: If you open your Battlesnake URL in browser you should see this data
+    def index(self):  
         return {
             "apiversion": "1",
             "author": "Amy, Samuel, Arusha and Sunil",  
@@ -25,25 +17,22 @@ class Battlesnake(object):
             "tail": "curled",  # TODO: Personalize
         }
 
+	#Method called at start of game
     @cherrypy.expose
     @cherrypy.tools.json_in()
     def start(self):
-        # This function is called everytime your snake is entered into a game.
-        # cherrypy.request.json contains information about the game that's about to be played.
         data = cherrypy.request.json
 
         print("START")
         return "ok"
 
+	#Function called every turn
     @cherrypy.expose
     @cherrypy.tools.json_in()
     @cherrypy.tools.json_out()  
     def move(self):
-        # This function is called on every turn of a game. It's how your snake decides where to move.
         # Valid moves are "up", "down", "left", or "right".
-        # TODO: Use the information in cherrypy.request.json to decide your next move.
-        data = cherrypy.request.json
-
+       
         # Choose a random direction to move in
         #possible_moves = ["up", "down", "left", "right"]
 
@@ -86,57 +75,6 @@ class Battlesnake(object):
         except:
           pass
 
-         # wall check
-        # if head_x <= testx and head_y <= testx:
-        #   try:
-        #    next_moves.remove("left")
-        #    next_moves.remove("down")
-        #   except:
-        #    pass
-        # elif head_x <= testx and head_y >= testy:
-        #   try:
-        #     next_moves.remove("left")
-        #     next_moves.remove("up")
-        #   except:
-        #     pass
-        # elif head_x <= testx:
-        #   try:
-        #     next_moves.remove("left")
-        #   except:
-        #     pass
-        # else:
-        #   pass
-        # if head_x >= testy and head_y <= testx:
-        #   try:
-        #    next_moves.remove("right")
-        #    next_moves.remove("down")
-        #   except:
-        #    pass
-        # elif head_x >= testy and head_y >= testy:
-        #   try:
-        #     next_moves.remove("right")
-        #     next_moves.remove("up")
-        #   except:
-        #     pass
-        # elif head_x >= testy:
-        #   try:
-        #     next_moves.remove("right")
-        #   except:
-        #     pass
-        # elif head_y <= testx:
-        #   try:
-        #     next_moves.remove("down")
-        #   except:
-        #     pass
-        # elif head_y >= testy:
-        #   try:
-        #     next_moves.remove("up")
-        #   except:
-        #     pass
-        # else:
-        #   pass
-
-        # expand movement out by one block
         possible_head_moves = [
           #original moves
           [head_x+1,head_y,["right"]],
@@ -362,111 +300,6 @@ class Battlesnake(object):
           final_move = best_move
         else:
           final_move = random.choice(next_moves)
-
-          
-        #removes move if body of snake is there
-        
-        
-
-          # for block in body_blocking:
-          #   if block["x"]+1 == head_x and block["y"] == head_y:
-          #     try:
-          #       next_moves.remove("left")
-          #     except:
-          #       pass
-          #   if block["x"]-1 == head_x and block["y"] == head_y:
-          #     try:
-          #       next_moves.remove("right")
-          #     except:
-          #       pass
-          #   if block["x"] == head_x and block["y"]+1 == head_y:
-          #     try:
-          #       next_moves.remove("down")
-          #     except:
-          #       pass
-          #   if block["x"] == head_x and block["y"]-1 == head_y:
-          #     try:
-          #       next_moves.remove("up")
-          #     except:
-          #       pass
-
-        #moves_before_food = next_moves
-            #move toward food
-        # food_moves = [] 
-        # best_move = ""
-        # if health <= 10:
-          
-        #   close_food = foods[0]
-        #   smallest_distance = 22
-
-        #   for food in foods:
-        #     distance = ((((head_x - food["x"] )**2) + ((head_y-food["y"])**2) )**0.5)
-        #     if distance < smallest_distance:
-        #       close_food = food
-          
-        #   food_x, food_y = close_food["x"], close_food["y"]
-
-        #   if food_x > head_x and food_y == head_y:
-        #     try:
-        #       if "right" in next_moves:
-        #         best_move = "right"   
-        #     except:
-        #       pass
-        #   elif food_x < head_x and food_y == head_y:
-        #     try:
-        #       if "left" in next_moves:
-        #         best_move = "left"
-        #     except:
-        #       pass
-        #   elif food_y > head_y and food_x == head_x:
-        #     try:
-        #       if "up" in next_moves:
-        #         best_move = "up"
-        #     except:
-        #       pass
-        #   elif food_y < head_y and food_x == head_x:
-        #     try:
-        #       if "down" in next_moves:
-        #         best_move = "down"
-        #     except:
-        #       pass
-        #   elif food_x > head_x and food_y >= head_y:
-        #     try:
-        #       if "right" in next_moves:
-        #         best_move = "right"
-        #       elif "up" in next_moves:
-        #         best_move = "up"
-        #     except:
-        #       pass
-        #   elif food_x > head_x and food_y <= head_y:
-        #     try:
-        #       if "right" in next_moves:
-        #         best_move = "right"
-        #       elif "down" in next_moves:
-        #         best_move = "down"
-        #     except:
-        #       pass
-        #   elif food_x < head_x and food_y >= head_y:
-        #     try:
-        #       if "left" in next_moves:
-        #         best_move = "left"
-        #       elif "up" in next_moves:
-        #         best_move = "up"
-        #     except:
-        #       pass
-        #   elif food_x < head_x and food_y <= head_y:
-        #     try:
-        #       if "left" in next_moves:
-        #         best_move = "left"
-        #       elif "down" in next_moves:
-        #         best_move = "down"
-        #     except:
-        #       pass
-        # best_move = ""
-        # if best_move == "":
-        #   final_move = random.choice(next_moves)
-        # else:
-        #   final_move = best_move
         
         return {"move": final_move}
 
@@ -474,7 +307,6 @@ class Battlesnake(object):
     @cherrypy.tools.json_in()
     def end(self):
         # This function is called when a game your snake was in ends.
-        # It's purely for informational purposes, you don't have to make any decisions here.
         data = cherrypy.request.json
 
         print("END")
